@@ -1,0 +1,38 @@
+HTTP Server:-
+
+Use "gcc -o WebServer WebServer.c" to create the executable server program.
+
+Use "./WebServer" to start the server.
+
+The program will read the ws.conf file and parse out individual configurations such as port-number, supported file types, root directory, homepage and timeout period.
+
+
+
+Testing:
+1) If URL "localhost:8000" is entered in web browser, server will respond with the "index.html" file from the "www" directory with all the other embedded files such as images and CSS
+2) Other checks can be performed by clicking on different links in the index.html webpage
+3) For checking pipeline, following command can be run from the linux command line:
+	(echo -en "GET /x.html HTTP/1.1\r\nHost: localhost\r\nConnection: Keepalive\r\n\r\nGET /x.html HTTP/1.1\r\nHost: localhost\r\n\r\n"; sleep 5) | telnet 127.0.0.1 8000
+4) For checking "POST" method support, following command can be run from the linux command line:
+	(echo -en "POST /x.html HTTP/1.1\r\nHost: localhost\r\nConnection: Keepalive\r\n\r\nPOST /x.html HTTP/1.1\r\nHost: localhost\r\n\r\n"; sleep 5) | telnet 127.0.0.1 8000
+
+
+
+Features:
+1) Supported Methods - GET and POST
+2) Supported HTTP versions - 1.0 and 1.1
+3) Multiple client support by using fork().
+4) Multiple request support
+5) Pipeline support with timeout.
+6) Server will gracefully(after closing socket) exit if "CTRL+C" is encountered. This is configured using the signal handler function
+7) If no URL is specified then server will respond with the default homepage from the "www" or the defined root directory from the conf file. (i.e. index.html)
+
+
+
+Error Handling:
+1) Program will exit if WS.conf doesn't exist.
+2) Program will exit if it can't create/bind server socket
+3) Program will send a 501 error to client for unsupported file types
+4) If a crash/Internal-error happens then client will receive a 500 error
+5) For invalid method/version/URL, a 400 error will be sent to client
+6) If the URL doesn't exist then 404 error will be sent
