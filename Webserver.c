@@ -310,7 +310,7 @@ int webserver(int fd,configstruct_t *config_parse)//considering forking for ever
 		}
 		readreq=fopen(tempreq,"r");
 		//read from file and serve all requests in case of pipelining
-		LOVE:
+		TAG:
 		
 			cc=0;
 			memset(req_read,0,BUFSIZE);
@@ -327,7 +327,7 @@ int webserver(int fd,configstruct_t *config_parse)//considering forking for ever
   				if(pipeline > 0 && pipeline < TIMEOUT)
   				{
   					pipeline++;
-  					goto LOVE;
+  					goto TAG;
   				}
 
   						
